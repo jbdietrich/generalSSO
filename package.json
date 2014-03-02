@@ -1,0 +1,15 @@
+{
+  "name": "generalSSO",
+  "version": "0.0.2",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.4.8",
+		"saml" : "0.6.1",
+    "jwt-simple": "0.1.0",
+    "pretty-data": "0.40.0",
+    "ejs": "*"
+  }
+}

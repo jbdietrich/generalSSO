@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>generalSSO | Logout page</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="bootstrap-3.1.1-dist/css/bootstrap.min.css" media="screen" rel="stylesheet">
+    <link href="stylesheets/style.css" media="screen" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand">generalSSO</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/jwt">JWT</a></li>
+                    <li><a href="/saml">SAML</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a class="active" href="/logout">Logout page</a></li>
+                </ul>
+                </div>
+          </div>
+        </div>
+    <div class="jumbotron">
+      <h2>Welcome to the logout page!</h2>
+      <p>Some information about your request:
+      <pre><%= request %></pre>
+      </p>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+    <script src="bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
+</body>
+</html>
