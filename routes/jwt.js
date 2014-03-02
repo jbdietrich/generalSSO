@@ -6,11 +6,10 @@ exports.display = function(req, res){
 };
 
 exports.generate = function(req, res) {
-
-  var jwtString = jwt.encode(req.body.payload, util.handleEmpty(req.body.meta.key || ' ')); // absent key, sign w/space
+  var jwtString = jwt.encode(req.body.payload, util.handleEmpty(req.body.meta.key) || ' '); // absent key, sign w/space
   var url = "https://" + util.handleEmpty(req.body.meta.hostname)
             + "/access/jwt?jwt=" + jwtString
-            + '?return_to=' + util.handleEmpty(req.body.meta.return_to);
+            + '&return_to=' + util.handleEmpty(req.body.meta.return_to);
 
   res.end(JSON.stringify({ url: url }));
 
