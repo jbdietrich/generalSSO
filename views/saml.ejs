@@ -33,6 +33,30 @@
         <div class="row">
             <div class="col-md-8">
                 <form class="form-horizontal">
+                    <!-- begin certs -->
+                    <h4>Certs</h4>
+                    <div class="well">
+                      <div class="form-group">
+                          <label class="col-sm-2 control-label" for="cert">Certificate</label>
+                          <div class="col-sm-4">
+                              <textarea class="form-control" id="cert" type="text" name="cert"></textarea>
+                          </div>
+                          <div class="col-sm-2">
+                            <label for="cert_file">Upload</label>
+                            <input type="file" class="cert_upload" id="cert_file">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label class="col-sm-2 control-label" for="key">Key</label>
+                          <div class="col-sm-4">
+                              <textarea class="form-control cert" id="key" type="text" name="key"></textarea>
+                          </div>
+                          <div class="col-sm-2">
+                            <label for="key_file">Upload</label>
+                            <input type="file" class="cert_upload" id="key_file">
+                          </div>
+                      </div>
+                    </div>
                     <!-- begin meta -->
                     <h4>Meta</h4>
                     <div class="well">
@@ -157,7 +181,7 @@
             <div class="col-md-4 hidden-sm">
                 <div data-offset-bottom="0" data-offset-top="2" data-spy="affix">
                     <h4>Response preview</h4>
-                    <pre id="response">&lt; /&gt;</pre>
+                    <pre id="response">&lt;/&gt;</pre>
                     <h4>Full response</h4>
                     <button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Open</button>
                 </div>
@@ -188,25 +212,34 @@
           o[this.name] = this.value;
         }
       });
+      $('textarea').each(function(){
+        if(this.value) {
+          o[this.name] = this.value;
+        }
+      });
       var metaKeys = ['destination', 'issue_instant', 'response_id', 'relay_state'];
-      var attrs = _.omit(o, metaKeys, 'nameid', 'SAMLResponse');
-      var meta = _.pick(o, metaKeys);
-      var nameid = o.nameid;
+      var certKeys = ['cert', 'key'];
+      var attrs = _.omit(o, metaKeys, certKeys, 'nameid', 'SAMLResponse');
       if (attrs.tags) {
-        attrs.tags = _.map(attrs.tags.split(','), function(tag){ return tag.trim(); });
+        attrs.tags = _.map(attrs.tags.split(','), function(tag){
+          return tag.trim();
+        });
       }
       $.ajax({ type: 'POST',
-               data: JSON.stringify({ meta: meta, attrs: attrs, nameid: nameid }),
+               data: JSON.stringify({ meta:   _.pick(o, metaKeys),
+                                      attrs:  attrs,
+                                      cert:   _.pick(o, certKeys),
+                                      nameid: o.nameid } ),
                dataType: 'JSON',
                headers: {'content-type': 'application/json'}
-             })
+      })
        .done(function(data){
          $('#response').text(data.rawResponse.slice(0,600));
          $('#fullResponse').text(data.formattedResponse);
          $('input[name="SAMLResponse"]').val(data.SAMLResponse);
          $('#redirect').attr('action', data.actionURL);
          if (e.type === 'click') {
-            $('#redirect').submit();
+          $('#redirect').submit();
          }
       });
     }
@@ -237,6 +270,15 @@
       .resize(function() {
       affix();
     });
+    $('.cert_upload').change(function(e){
+      var file = this.files[0];
+      var textarea = '#' + this.id.split('_')[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        $(textarea).val(e.target.result);
+      }
+      reader.readAsText(file);
+    });
     $('#generate_instant').click(function(){
       $(this).parent().siblings()
       .val( generateInstant() )
@@ -251,6 +293,9 @@
       collectParams(e);
     });
     $('input').change(function(e){
+      collectParams(e);
+    });
+    $('textarea').change(function(e){
       collectParams(e);
     });
     </script>

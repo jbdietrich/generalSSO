@@ -14,3 +14,7 @@ pre {
   white-space: no-wrap;
   word-wrap : normal;
 }
+
+textarea {
+  resize:vertical;
+}

@@ -13,9 +13,13 @@ exports.display = function(req, res){
 }
 
 exports.generate = function(req, res){
+
+  var fsCert = fs.readFileSync(path.join(__dirname, testing.cert).replace('/routes', ''));
+  var fsKey = fs.readFileSync(path.join(__dirname, testing.key).replace('/routes', ''));
+
   var options = {
-    cert:              fs.readFileSync(path.join(__dirname, testing.cert).replace('/routes', '')),
-    key:               fs.readFileSync(path.join(__dirname, testing.key).replace('/routes', '')),
+    cert:              util.handleEmpty(req.body.cert.cert) || fsCert,
+    key:               util.handleEmpty(req.body.cert.key) || fsKey,
     issuer:            'generalSSO',
     lifetimeInSeconds: 600,
     audiences:         'zendesk.com',
