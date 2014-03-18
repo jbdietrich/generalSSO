@@ -18,18 +18,24 @@ exports.generate = function(req, res){
   var fsKey = fs.readFileSync(path.join(__dirname, testing.key).replace('/routes', ''));
 
   var options = {
-    cert:              util.handleEmpty(req.body.cert.cert) || fsCert,
+    cert:              util.handleEmpty(req.body.cert.cert) || fsCert, // todo: fix default/error handling for certs, see also L30
     key:               util.handleEmpty(req.body.cert.key) || fsKey,
     issuer:            'generalSSO',
     lifetimeInSeconds: 600,
     audiences:         'zendesk.com',
     attributes:        req.body.attrs,
-    nameIdentifier:    util.handleEmpty(req.body.nameid) || ' '
+    nameIdentifier:    util.handleEmpty(req.body.nameid) || ' ' // permit empty string to simulate badly formatted NameID
   };
 
-  var assertion = saml20.create(options);
+  try {
+    var assertion = saml20.create(options);
+  }
+  catch(e) {
+    var assertion = null;
+  }
+
   var destination = 'https://' + util.handleEmpty(req.body.meta.destination) + '/access/saml';
-  var relayState = util.handleEmpty(req.body.meta.relay_state) || ' ';
+  var RelayState = util.handleEmpty(req.body.meta.relay_state) || ' ';
 
   var response = templates.response({
     id:             util.handleEmpty(req.body.meta.response_id),
@@ -44,6 +50,7 @@ exports.generate = function(req, res){
   res.end(JSON.stringify({ formattedResponse: pd.xml(response),
                            rawResponse:       response,
                            actionURL:         destination,
-                           SAMLResponse:      util.urlSafeResponse(response)
+                           RelayState:        RelayState,
+                           SAMLResponse:      util.b64Response(response)
   }));
 }

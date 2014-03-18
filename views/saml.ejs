@@ -174,9 +174,12 @@
                     </div>
                     <!-- end attrs -->
                 </form>
+                <!-- SAML form -->
                 <form id="redirect" method="post" action="">
                    <input type="hidden" name="SAMLResponse" value="" />
+                   <input type="hidden" name="RelayState" value="" />
                 </form>
+                <!-- end SAML form -->
             </div>
             <div class="col-md-4 hidden-sm">
                 <div data-offset-bottom="0" data-offset-top="2" data-spy="affix">
@@ -237,6 +240,7 @@
          $('#response').text(data.rawResponse.slice(0,600));
          $('#fullResponse').text(data.formattedResponse);
          $('input[name="SAMLResponse"]').val(data.SAMLResponse);
+         $('input[name="RelayState"]').val(data.RelayState);
          $('#redirect').attr('action', data.actionURL);
          if (e.type === 'click') {
           $('#redirect').submit();
