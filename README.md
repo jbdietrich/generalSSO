@@ -16,10 +16,12 @@ At a bare minimum, a JWT payload requires the following:
 [Zendesk documentation for JWT](https://support.zendesk.com/entries/23675367-Setting-up-single-sign-on-with-JWT-JSON-Web-Token-)
 ## SAML
 
-Zendesk requires that the fingerprint of the certificate used to sign SAML assertions be entered under  **Settings > Security > SSO > JWT**. You can simply replace the provided test certificates with your own, or you can leave the testing certs and add more for other environments under `/config`. Don't use the certificates in this repo for anything other than local testing.
+Zendesk requires that the fingerprint of the certificate used to sign SAML assertions be entered under  **Settings > Security > SSO > JWT**.
 
 At a bare minimum, a SAML response should contain:
 
+- `Certificate`
+- `Key`
 - `Destination hostname`
 - `IssueInstant`
 - `Response ID`
@@ -31,4 +33,4 @@ At a bare minimum, a SAML response should contain:
 
 ## Live demo
 
-See a live demo at [http://generals.so](http://generals.so). Don't use the demo to authenticate against production accounts!
+See a live demo at [https://generals.so](https://generals.so). Don't use the demo to authenticate against production accounts!

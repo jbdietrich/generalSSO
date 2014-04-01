@@ -1,11 +1,9 @@
 var saml20      = require('saml').Saml20,
     pd          = require('pretty-data').pd,
     fs          = require('fs'),
-    path        = require('path');
+    path        = require('path'),
     templates   = require('../lib/templates'),
-    util        = require('../lib/util'),
-    testing     = require('../config/testing');
-
+    util        = require('../lib/util');
 
 exports.display = function(req, res){
    res.render('saml', { SAMLRequest: req.query.SAMLRequest || '',
@@ -14,12 +12,9 @@ exports.display = function(req, res){
 
 exports.generate = function(req, res){
 
-  var fsCert = fs.readFileSync(path.join(__dirname, testing.cert).replace('/routes', ''));
-  var fsKey = fs.readFileSync(path.join(__dirname, testing.key).replace('/routes', ''));
-
   var options = {
-    cert:              util.handleEmpty(req.body.cert.cert) || fsCert, // todo: fix default/error handling for certs, see also L30
-    key:               util.handleEmpty(req.body.cert.key) || fsKey,
+    cert:              util.handleEmpty(req.body.cert.cert), // todo: fix default/error handling for certs, see also L25
+    key:               util.handleEmpty(req.body.cert.key),
     issuer:            'generalSSO',
     lifetimeInSeconds: 600,
     audiences:         'zendesk.com',
