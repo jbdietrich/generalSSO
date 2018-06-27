@@ -17,7 +17,7 @@ exports.generate = function(req, res){
     key:               util.handleEmpty(req.body.cert.key),
     issuer:            'generalSSO',
     lifetimeInSeconds: 600,
-    audiences:         'zendesk.com',
+    audiences:         util.handleEmpty(req.body.meta.destination),
     attributes:        req.body.attrs,
     nameIdentifier:    util.handleEmpty(req.body.nameid) || ' ' // permit empty string to simulate badly formatted NameID
   };
